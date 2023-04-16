@@ -181,10 +181,10 @@ Are you facing a [CORS policy](https://developer.mozilla.org/en-US/docs/Web/HTTP
 1. **Use third-party services like [allOrigins](https://allorigins.win/).**
 With this service, you can fetch the source code or an image in base64 format from any website. However, this method can be a bit slow.
 
-2. **Set up your own API service.**
+1. **Set up your own API service.**
 Compared to third-party services like [allOrigins](https://allorigins.win/), this method can be faster, but you'll need to convert the image URL to base64 format. You can use the "[image-to-base64](https://github.com/renanbastos93/image-to-base64)" package for this purpose.
 
-3. **Utilize [server-side functions](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) features of frameworks like [Next.js](https://nextjs.org/).**
+1. **Utilize [server-side functions](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) features of frameworks like [Next.js](https://nextjs.org/).**
 This is the easiest and most convenient method, where you can directly fetch a URL source within [server-side functions](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) and convert it to base64 format if needed.
 
 By exploring these alternative solutions, you can overcome [the CORS policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) issue in your app and ensure that your images are accessible to everyone.
@@ -273,7 +273,7 @@ for you, following steps are taken:
 1. Use original `dom-to-image` type definition
    `npm install @types/dom-to-image --save-dev`
 
-2. Create dom-to-image-more type definition (`dom-to-image-more.d.ts`)
+1. Create dom-to-image-more type definition (`dom-to-image-more.d.ts`)
 
     ```javascript
     declare module 'dom-to-image-more' {
@@ -293,7 +293,7 @@ for you, following steps are taken:
 Marc Brooks, Anatolii Saienko (original dom-to-image), Paul Bakaus (original idea),
 Aidas Klimas (fixes), Edgardo Di Gesto (fixes), 樊冬 Fan Dong (fixes), Shrijan Tripathi (docs),
 SNDST00M (optimize), Joseph White (performance CSS), Phani Rithvij (test),
-David DOLCIMASCOLO (packaging), Zee (ZM) @zm-cttae (many major updates), Joshua Walsh @JoshuaWalsh (Firefox issues)
+David DOLCIMASCOLO (packaging), Zee (ZM) @zm-cttae (many major updates), Joshua Walsh @JoshuaWalsh (Firefox issues), Emre Coban @emrecoban (documentation)
 
 
 ## License
