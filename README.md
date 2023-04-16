@@ -174,6 +174,21 @@ A data URL for a placeholder image that will be used when fetching an image fail
 
 Set to true to enable the copying of the default styles of elements. This will make the process faster. Try disabling it if seeing extra padding and using resetting / normalizing in CSS. Defaults to true.
 
+### Alternative Solutions to CORS Policy Issue
+
+Are you facing a [CORS policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) issue in your app? Don't worry, there are alternative solutions to this problem that you can explore. Here are some options to consider:
+
+1. **Use third-party services like [allOrigins](https://allorigins.win/).**
+With this service, you can fetch the source code or an image in base64 format from any website. However, this method can be a bit slow.
+
+2. **Set up your own API service.**
+Compared to third-party services like [allOrigins](https://allorigins.win/), this method can be faster, but you'll need to convert the image URL to base64 format. You can use the "[image-to-base64](https://github.com/renanbastos93/image-to-base64)" package for this purpose.
+
+3. **Utilize [server-side functions](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) features of frameworks like [Next.js](https://nextjs.org/).**
+This is the easiest and most convenient method, where you can directly fetch a URL source within [server-side functions](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) and convert it to base64 format if needed.
+
+By exploring these alternative solutions, you can overcome [the CORS policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) issue in your app and ensure that your images are accessible to everyone.
+
 ## Browsers
 
 It's tested on latest Chrome and Firefox (49 and 45 respectively at the time
