@@ -1,6 +1,6 @@
 {
     "name": "dom-to-image-more",
-    "version": "3.1.2",
+    "version": "3.1.4",
     "description": "Generates an image from a DOM node using HTML5 canvas and SVG",
     "main": "dist/dom-to-image-more.min.js",
     "devDependencies": {
@@ -66,8 +66,5 @@
     "bugs": {
         "url": "https://github.com/1904labs/dom-to-image-more/issues"
     },
-    "homepage": "https://github.com/1904labs/dom-to-image-more#readme",
-    "publishConfig": {
-        "registry": "https://npm.pkg.github.com"
-    }
+    "homepage": "https://github.com/1904labs/dom-to-image-more#readme"
 }
