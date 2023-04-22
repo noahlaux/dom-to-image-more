@@ -5,7 +5,7 @@
     const inliner = newInliner();
     const fontFaces = newFontFaces();
     const images = newImages();
-    const ELEMENT_NODE = Node.ELEMENT_NODE || 1;
+    const ELEMENT_NODE = typeof Node === 'undefined' ? 1 : Node.ELEMENT_NODE || 1;
 
     // Default impl options
     const defaultOptions = {
