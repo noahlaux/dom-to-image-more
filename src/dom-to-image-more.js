@@ -5,8 +5,8 @@
     const inliner = newInliner();
     const fontFaces = newFontFaces();
     const images = newImages();
-    const ELEMENT_NODE = typeof Node === 'undefined' ? 1 : Node.ELEMENT_NODE || 1;
-
+    const ELEMENT_NODE = (Node && Node.ELEMENT_NODE) || 1;
+    
     // Default impl options
     const defaultOptions = {
         // Default is to copy default styles of elements
@@ -47,8 +47,8 @@
     }
 
     // support node and browsers
-    const getComputedStyle = global.getComputedStyle || window.getComputedStyle;
-    const atob = global.atob || window.atob;
+    const getComputedStyle = (global && global.getComputedStyle) || (window && window.getComputedStyle) || globalThis.getComputedStyle;
+    const atob = (global && global.atob) || (window && window.atob) || globalThis.atob;
 
     /**
      * @param {Node} node - The DOM Node object to render
@@ -108,7 +108,6 @@
             // put the original children back where the wrappers were inserted
             while (restorations.length > 0) {
                 const restoration = restorations.pop();
-                //console.log(`parent: ${restoration.parent}\nchild: ${restoration.child}\nwrapper: ${restoration.wrapper}`);
                 restoration.parent.replaceChild(restoration.child, restoration.wrapper);
             }
 
@@ -1262,80 +1261,6 @@
             return tagHierarchy.join('>'); // it's like CSS
         }
 
-        function ensureSandboxWindow() {
-            if (sandbox) {
-                return sandbox.contentWindow;
-            }
-
-            // figure out how this document is defined (doctype and charset)
-            const charsetToUse = document.characterSet || 'UTF-8';
-            const docType = document.doctype;
-            const docTypeDeclaration = docType
-                ? `<!DOCTYPE ${escapeHTML(docType.name)} ${escapeHTML(
-                      docType.publicId
-                  )} ${escapeHTML(docType.systemId)}`.trim() + '>'
-                : '';
-
-            // Create a hidden sandbox <iframe> element within we can create default HTML elements and query their
-            // computed styles. Elements must be rendered in order to query their computed styles. The <iframe> won't
-            // render at all with `display: none`, so we have to use `visibility: hidden` with `position: fixed`.
-            sandbox = document.createElement('iframe');
-            sandbox.id = 'domtoimage-sandbox-' + util.uid();
-            sandbox.style.visibility = 'hidden';
-            sandbox.style.position = 'fixed';
-            document.body.appendChild(sandbox);
-
-            return tryTechniques(
-                sandbox,
-                docTypeDeclaration,
-                charsetToUse,
-                'domtoimage-sandbox'
-            );
-
-            function escapeHTML(unsafeText) {
-                if (unsafeText) {
-                    const div = document.createElement('div');
-                    div.innerText = unsafeText;
-                    return div.innerHTML;
-                } else {
-                    return '';
-                }
-            }
-
-            function tryTechniques(sandbox, doctype, charset, title) {
-                // try the good old-fashioned document write with all the correct attributes set
-                try {
-                    sandbox.contentWindow.document.write(
-                        `${doctype}<html><head><meta charset='${charset}'><title>${title}</title></head><body></body></html>`
-                    );
-                    return sandbox.contentWindow;
-                } catch (_) {
-                    // swallow exception and fall through to next technique
-                }
-
-                const metaCharset = document.createElement('meta');
-                metaCharset.setAttribute('charset', charset);
-
-                // let's attempt it using srcdoc, so we can still set the doctype and charset
-                try {
-                    const sandboxDocument =
-                        document.implementation.createHTMLDocument(title);
-                    sandboxDocument.head.appendChild(metaCharset);
-                    const sandboxHTML =
-                        doctype + sandboxDocument.documentElement.outerHTML;
-                    sandbox.setAttribute('srcdoc', sandboxHTML);
-                    return sandbox.contentWindow;
-                } catch (_) {
-                    // swallow exception and fall through to the simplest path
-                }
-
-                // let's attempt it using contentDocument... here we're not able to set the doctype
-                sandbox.contentDocument.head.appendChild(metaCharset);
-                sandbox.contentDocument.title = title;
-                return sandbox.contentWindow;
-            }
-        }
-
         function constructElementHierachy(sandboxDocument, tagHierarchy) {
             let element = sandboxDocument.body;
             do {
@@ -1374,6 +1299,78 @@
                 }
                 element = parentElement;
             } while (element && element.tagName !== 'BODY');
+        }
+    }
+
+    function ensureSandboxWindow() {
+        if (sandbox) {
+            return sandbox.contentWindow;
+        }
+
+        // figure out how this document is defined (doctype and charset)
+        const charsetToUse = document.characterSet || 'UTF-8';
+        const docType = document.doctype;
+        const docTypeDeclaration = docType
+            ? `<!DOCTYPE ${escapeHTML(docType.name)} ${escapeHTML(docType.publicId)} ${escapeHTML(docType.systemId)}`.trim() + '>'
+            : '';
+
+        // Create a hidden sandbox <iframe> element within we can create default HTML elements and query their
+        // computed styles. Elements must be rendered in order to query their computed styles. The <iframe> won't
+        // render at all with `display: none`, so we have to use `visibility: hidden` with `position: fixed`.
+        sandbox = document.createElement('iframe');
+        sandbox.id = 'domtoimage-sandbox-' + util.uid();
+        sandbox.style.visibility = 'hidden';
+        sandbox.style.position = 'fixed';
+        document.body.appendChild(sandbox);
+
+        return tryTechniques(
+            sandbox,
+            docTypeDeclaration,
+            charsetToUse,
+            'domtoimage-sandbox'
+        );
+
+        function escapeHTML(unsafeText) {
+            if (unsafeText) {
+                const div = document.createElement('div');
+                div.innerText = unsafeText;
+                return div.innerHTML;
+            } else {
+                return '';
+            }
+        }
+
+        function tryTechniques(sandbox, doctype, charset, title) {
+            // try the good old-fashioned document write with all the correct attributes set
+            try {
+                sandbox.contentWindow.document.write(
+                    `${doctype}<html><head><meta charset='${charset}'><title>${title}</title></head><body></body></html>`
+                );
+                return sandbox.contentWindow;
+            } catch (_) {
+                // swallow exception and fall through to next technique
+            }
+
+            const metaCharset = document.createElement('meta');
+            metaCharset.setAttribute('charset', charset);
+
+            // let's attempt it using srcdoc, so we can still set the doctype and charset
+            try {
+                const sandboxDocument =
+                    document.implementation.createHTMLDocument(title);
+                sandboxDocument.head.appendChild(metaCharset);
+                const sandboxHTML =
+                    doctype + sandboxDocument.documentElement.outerHTML;
+                sandbox.setAttribute('srcdoc', sandboxHTML);
+                return sandbox.contentWindow;
+            } catch (_) {
+                // swallow exception and fall through to the simplest path
+            }
+
+            // let's attempt it using contentDocument... here we're not able to set the doctype
+            sandbox.contentDocument.head.appendChild(metaCharset);
+            sandbox.contentDocument.title = title;
+            return sandbox.contentWindow;
         }
     }
 

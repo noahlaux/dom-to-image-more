@@ -10,10 +10,10 @@
 
 The 3.x release branch included some breaking changes in the vary infrequently used ability to configure some utility methods used in this internal processing of dom-to-image-more. As browsers have matured, many of the hacks we're accumulated over the years are not needed, or better ways have been found to handle some edge-cases. With the help of folks like @meche-gh, in #99 we're stripping out the following members:
 
--   `.mimes` - was the not-very-comprehensive list of mime types used to handle inlining things
--   `.parseExtension` - was a method to extract the extension from a filename, used to guess mime types
--   `.mimeType` - was a method to map file extensions to mime types
--   `.dataAsUrl` - was a method to reassemble a `data:` URI from a Base64 representation and mime type
+- `.mimes` - was the not-very-comprehensive list of mime types used to handle inlining things
+- `.parseExtension` - was a method to extract the extension from a filename, used to guess mime types
+- `.mimeType` - was a method to map file extensions to mime types
+- `.dataAsUrl` - was a method to reassemble a `data:` URI from a Base64 representation and mime type
 
 The 3.x release branch should also fix more node compatibility and `iframe` issues.
 
@@ -207,8 +207,8 @@ _Safari [is not supported](https://github.com/tsayen/dom-to-image/issues/27), as
 
 Only standard lib is currently used, but make sure your browser supports:
 
--   [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
--   SVG `<foreignObject>` tag
+- [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+- SVG `<foreignObject>` tag
 
 ### Tests
 
@@ -216,7 +216,7 @@ As of this v3 branch chain, the testing jig is taking advantage of the `onclone`
 
 Most importantly, tests **only** depend on:
 
--   [ocrad.js](https://github.com/antimatter15/ocrad.js), for the
+- [ocrad.js](https://github.com/antimatter15/ocrad.js), for the
     parts when you can't compare images (due to the browser
     rendering differences) and just have to test whether the text is rendered
 
@@ -284,16 +284,16 @@ for you, following steps are taken:
 
 ## Things to watch out for
 
--   if the DOM node you want to render includes a `<canvas>` element with something drawn on it, it should be handled fine, unless the canvas is [tainted](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image) - in this case rendering will rather not succeed.
+- if the DOM node you want to render includes a `<canvas>` element with something drawn on it, it should be handled fine, unless the canvas is [tainted](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image) - in this case rendering will rather not succeed.
 
--   at the time of writing, Firefox has a problem with some external stylesheets (see issue #13). In such case, the error will be caught and logged.
+- at the time of writing, Firefox has a problem with some external stylesheets (see issue #13). In such case, the error will be caught and logged.
 
 ## Authors
 
 Marc Brooks, Anatolii Saienko (original dom-to-image), Paul Bakaus (original idea),
 Aidas Klimas (fixes), Edgardo Di Gesto (fixes), 樊冬 Fan Dong (fixes), Shrijan Tripathi (docs),
 SNDST00M (optimize), Joseph White (performance CSS), Phani Rithvij (test),
-David DOLCIMASCOLO (packaging), Zee (ZM) @zm-cttae (many major updates), Joshua Walsh @JoshuaWalsh (Firefox issues), Emre Coban @emrecoban (documentation)
+David DOLCIMASCOLO (packaging), Zee (ZM) @zm-cttae (many major updates), Joshua Walsh @JoshuaWalsh (Firefox issues), Emre Coban @emrecoban (documentation), Nate Stuyvesant @nstuyvesant (fixes)
 
 
 ## License
