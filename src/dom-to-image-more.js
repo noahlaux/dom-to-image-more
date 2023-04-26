@@ -5,8 +5,7 @@
     const inliner = newInliner();
     const fontFaces = newFontFaces();
     const images = newImages();
-    const ELEMENT_NODE = (Node && Node.ELEMENT_NODE) || 1;
-    
+
     // Default impl options
     const defaultOptions = {
         // Default is to copy default styles of elements
@@ -47,8 +46,16 @@
     }
 
     // support node and browsers
-    const getComputedStyle = (global && global.getComputedStyle) || (window && window.getComputedStyle) || globalThis.getComputedStyle;
-    const atob = (global && global.atob) || (window && window.atob) || globalThis.atob;
+    const ELEMENT_NODE =
+        (typeof Node !== 'undefined' ? Node.ELEMENT_NODE : undefined) || 1;
+    const getComputedStyle =
+        (typeof global !== 'undefined' ? global.getComputedStyle : undefined) ||
+        (typeof window !== 'undefined' ? window.getComputedStyle : undefined) ||
+        globalThis.getComputedStyle;
+    const atob =
+        (typeof global !== 'undefined' ? global.atob : undefined) ||
+        (typeof window !== 'undefined' ? window.atob : undefined) ||
+        globalThis.atob;
 
     /**
      * @param {Node} node - The DOM Node object to render
@@ -1311,7 +1318,9 @@
         const charsetToUse = document.characterSet || 'UTF-8';
         const docType = document.doctype;
         const docTypeDeclaration = docType
-            ? `<!DOCTYPE ${escapeHTML(docType.name)} ${escapeHTML(docType.publicId)} ${escapeHTML(docType.systemId)}`.trim() + '>'
+            ? `<!DOCTYPE ${escapeHTML(docType.name)} ${escapeHTML(
+                  docType.publicId
+              )} ${escapeHTML(docType.systemId)}`.trim() + '>'
             : '';
 
         // Create a hidden sandbox <iframe> element within we can create default HTML elements and query their
@@ -1356,11 +1365,9 @@
 
             // let's attempt it using srcdoc, so we can still set the doctype and charset
             try {
-                const sandboxDocument =
-                    document.implementation.createHTMLDocument(title);
+                const sandboxDocument = document.implementation.createHTMLDocument(title);
                 sandboxDocument.head.appendChild(metaCharset);
-                const sandboxHTML =
-                    doctype + sandboxDocument.documentElement.outerHTML;
+                const sandboxHTML = doctype + sandboxDocument.documentElement.outerHTML;
                 sandbox.setAttribute('srcdoc', sandboxHTML);
                 return sandbox.contentWindow;
             } catch (_) {
