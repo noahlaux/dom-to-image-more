@@ -175,7 +175,7 @@
                     const svgSizing =
                         (util.isDimensionMissing(width) ? '' : ` width="${width}"`) +
                         (util.isDimensionMissing(height) ? '' : ` height="${height}"`);
-                    return `<svg xmlns="http://www.w3.org/2000/svg"${svgSizing}><foreignObject${foreignObjectSizing}>${xhtml}</foreignObject></svg>`;
+                    return `<svg xmlns="http://www.w3.org/2000/svg"${svgSizing}><foreignObject style="overflow: visible"${foreignObjectSizing}>${xhtml}</foreignObject></svg>`;
                 })
                 .then(function (svg) {
                     return `data:image/svg+xml;charset=utf-8,${svg}`;
